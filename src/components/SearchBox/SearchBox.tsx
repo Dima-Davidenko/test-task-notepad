@@ -11,7 +11,7 @@ const SearchBox: React.FC<ISearchBox> = ({ setSearchInput, searchInput }) => {
       type="text"
       onChange={e => setSearchInput(e.target.value)}
       value={searchInput}
-      placeholder="Search"
+      placeholder="Пошук"
     />
   );
 };

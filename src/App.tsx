@@ -26,10 +26,13 @@ const App = () => {
     });
   }, [refreshPage]);
   useEffect(() => {
-    if (searchInput) setSelectedNoteID('');
+    if (searchInput) {
+      setSelectedNoteID('');
+      setIsNoteEditing(false);
+    }
   }, [searchInput]);
 
-  const createNote = (note: string = 'Start editing your new note...') => {
+  const createNote = (note: string = 'Це моя нова записка...') => {
     addNote(note).then(res => {
       setRefreshPage(Date.now());
       setSelectedNoteID(res.record.id);
@@ -68,6 +71,12 @@ const App = () => {
 
   const editNote = (noteText: string) => {
     setEditingNoteText(noteText);
+    setNotes(notes => {
+      const newNotes = [...notes];
+      const editedNote = newNotes.find(note => note.id === selectedNoteID) as IRecord;
+      editedNote.values.cjW6LtobLbW4dcIwGSiSkE = noteText;
+      return newNotes;
+    });
     updateNoteAPI(selectedNoteID, noteText);
   };
 
@@ -88,12 +97,18 @@ const App = () => {
           </Sidebar>
           <Workspace
             isNoteEditing={isNoteEditing}
+            startNoteEditing={startNoteEditing}
             editingNoteText={editingNoteText}
             editNote={editNote}
           />
         </div>
       </div>
-      <ReactModal isOpen={isModalOpen}>
+      <ReactModal
+        className="modal"
+        overlayClassName="overlay"
+        isOpen={isModalOpen}
+        ariaHideApp={false}
+      >
         <p>Please confirm note deletion</p>
         <button onClick={() => deleteNote()}>Confirm deletion</button>
         <button onClick={() => cancelDeletionNote()}>Close</button>

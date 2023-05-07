@@ -1,4 +1,5 @@
 import React from 'react';
+import css from './ActionBtn.module.css';
 
 interface IActionBtn {
   title: string;
@@ -10,6 +11,7 @@ interface IActionBtn {
 const ActionBtn: React.FC<IActionBtn> = ({ title, disabled, onClickFoo, selectedNoteID }) => {
   return (
     <button
+      className={css.actionBtn}
       onClick={() => (onClickFoo ? onClickFoo(selectedNoteID) : () => {})}
       disabled={disabled}
     >

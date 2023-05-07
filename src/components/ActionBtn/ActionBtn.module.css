@@ -1,0 +1,15 @@
+.actionBtn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f6f6f6;
+}
+.actionBtn:hover {
+  background-color: #9b9898;
+}
+.actionBtn:disabled:hover {
+  background-color: #f6f6f6;
+}
+.actionBtn:not(:last-child) {
+  margin-right: 10px;
+}

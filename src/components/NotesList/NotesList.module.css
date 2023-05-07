@@ -1,0 +1,27 @@
+.container {
+  padding: 10px;
+}
+.noteItem {
+  padding: 15px 0;
+  border-bottom: 2px solid #f0f0f0;
+  cursor: pointer;
+}
+.noteItem:hover {
+  background-color: #cfcfcf;
+}
+.selectedNote {
+  background-color: #cfcfcf;
+}
+.date {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.notePreview {
+  font-size: 13px;
+  font-weight: 500;
+}
+.findResult {
+  font-size: 15px;
+  font-weight: 500;
+}
