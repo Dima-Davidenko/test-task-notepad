@@ -9,18 +9,20 @@ import { IRecord } from './components/types/notes';
 import NotesList from './components/NotesList/NotesList';
 import MainMenu from './components/MainMenu/MainMenu';
 import SearchBox from './components/SearchBox/SearchBox';
+import ReactModal from 'react-modal';
 
 const App = () => {
   const [refreshPage, setRefreshPage] = useState(Date.now());
   const [notes, setNotes] = useState<Array<IRecord> | []>([]);
   const [selectedNoteID, setSelectedNoteID] = useState<string>('');
+  const [noteToDeleteID, setNoteToDeleteID] = useState<string>('');
   const [isNoteEditing, setIsNoteEditing] = useState<boolean>(false);
   const [editingNoteText, setEditingNoteText] = useState<string>('');
   const [searchInput, setSearchInput] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   useEffect(() => {
     getNotes().then(res => {
       setNotes(res.records);
-      console.log(res);
     });
   }, [refreshPage]);
   useEffect(() => {
@@ -28,12 +30,29 @@ const App = () => {
   }, [searchInput]);
 
   const createNote = (note: string = 'Start editing your new note...') => {
-    addNote(note).then(() => setRefreshPage(Date.now()));
+    addNote(note).then(res => {
+      setRefreshPage(Date.now());
+      setSelectedNoteID(res.record.id);
+      setIsNoteEditing(true);
+    });
   };
 
-  const deleteNote = (noteID: string) => {
-    console.log(noteID);
-    deleteNoteAPI(noteID).then(() => setRefreshPage(Date.now()));
+  const confirmDeleteNote = (noteID: string) => {
+    setNoteToDeleteID(noteID);
+    setIsModalOpen(true);
+  };
+
+  const deleteNote = () => {
+    deleteNoteAPI(noteToDeleteID).then(() => {
+      setNoteToDeleteID('');
+      setRefreshPage(Date.now());
+    });
+    setIsModalOpen(false);
+  };
+
+  const cancelDeletionNote = () => {
+    setNoteToDeleteID('');
+    setIsModalOpen(false);
   };
 
   const startNoteEditing = () => {
@@ -56,7 +75,11 @@ const App = () => {
     <NotesContext.Provider value={{ notes, selectedNoteID, isNoteEditing }}>
       <div className="App">
         <TopBar>
-          <MainMenu deleteFoo={deleteNote} editFoo={startNoteEditing} createNote={createNote} />
+          <MainMenu
+            deleteFoo={confirmDeleteNote}
+            editFoo={startNoteEditing}
+            createNote={createNote}
+          />
           <SearchBox searchInput={searchInput} setSearchInput={setSearchInput} />
         </TopBar>
         <div className="sideBar-workSpace-wrapper">
@@ -70,6 +93,11 @@ const App = () => {
           />
         </div>
       </div>
+      <ReactModal isOpen={isModalOpen}>
+        <p>Please confirm note deletion</p>
+        <button onClick={() => deleteNote()}>Confirm deletion</button>
+        <button onClick={() => cancelDeletionNote()}>Close</button>
+      </ReactModal>
     </NotesContext.Provider>
   );
 };

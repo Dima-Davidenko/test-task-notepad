@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IRes } from '../../components/types/notes';
+import { IRecord, IRes } from '../../components/types/notes';
 
 export const getNotes = async () => {
   const { data } = await axios.get<IRes>(
@@ -14,7 +14,7 @@ export const getNotes = async () => {
 };
 
 export const addNote = async (note: string) => {
-  const { data } = await axios.post<IRes>(
+  const { data } = await axios.post<{ record: IRecord }>(
     `https://QuintaDB.com/apps/${process.env.REACT_APP_DB_ID}/dtypes.json`,
     {
       rest_api_key: process.env.REACT_APP_REST_API_KEY,
