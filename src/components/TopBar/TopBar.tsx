@@ -1,14 +1,7 @@
 import React from 'react';
-import MainMenu from '../MainMenu/MainMenu';
-import SearchBox from '../SearchBox/SearchBox';
 
-const TopBar = () => {
-  return (
-    <div className="topBar">
-      <MainMenu />
-      <SearchBox />
-    </div>
-  );
+const TopBar: React.FC<React.PropsWithChildren> = ({ children }) => {
+  return <div className="topBar">{children}</div>;
 };
 
 export default TopBar;

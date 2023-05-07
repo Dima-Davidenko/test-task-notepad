@@ -13,3 +13,6 @@ div {
 .workSpace {
   flex-grow: 1;
 }
+.sideBar {
+  min-width: 320px;
+}
