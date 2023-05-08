@@ -1,4 +1,5 @@
 import React from 'react';
+import css from './SearchBox.module.css';
 
 interface ISearchBox {
   searchInput: string;
@@ -8,6 +9,7 @@ interface ISearchBox {
 const SearchBox: React.FC<ISearchBox> = ({ setSearchInput, searchInput }) => {
   return (
     <input
+      className={css.input}
       type="text"
       onChange={e => setSearchInput(e.target.value)}
       value={searchInput}

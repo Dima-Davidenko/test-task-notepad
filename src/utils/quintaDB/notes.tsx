@@ -20,7 +20,7 @@ export const addNote = async (note: string) => {
       rest_api_key: process.env.REACT_APP_REST_API_KEY,
       entity_id: process.env.REACT_APP_ENTITY_ID,
       values: {
-        cjW6LtobLbW4dcIwGSiSkE: note,
+        cNuCoUWPDdAlRcO30iDCkc: note,
       },
     }
   );
@@ -44,7 +44,7 @@ export const updateNoteAPI = async (noteID: string, noteText: string) => {
     `https://QuintaDB.com/apps/${process.env.REACT_APP_DB_ID}/dtypes/${noteID}.json?rest_api_key=${process.env.REACT_APP_REST_API_KEY}`,
     {
       values: {
-        cjW6LtobLbW4dcIwGSiSkE: noteText,
+        cNuCoUWPDdAlRcO30iDCkc: noteText,
       },
     }
   );

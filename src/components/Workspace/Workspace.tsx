@@ -7,6 +7,7 @@ interface IWorkspace {
   editingNoteText: string;
   startNoteEditing: () => void;
   editNote: (noteText: string) => void;
+  saveNote: () => void;
 }
 
 const Workspace: React.FC<IWorkspace> = ({
@@ -14,12 +15,13 @@ const Workspace: React.FC<IWorkspace> = ({
   editingNoteText,
   editNote,
   startNoteEditing,
+  saveNote,
 }) => {
   const notesContext = useContext<IStoreContext>(NotesContext);
   const notes = notesContext.notes;
   const selectedNoteID = notesContext.selectedNoteID;
   const selectedNoteText = notes.find(record => record.id === selectedNoteID)?.values
-    .cjW6LtobLbW4dcIwGSiSkE;
+    .cNuCoUWPDdAlRcO30iDCkc;
   if (!isNoteEditing) {
     return (
       <div className={css.workspace} onClick={() => (selectedNoteID ? startNoteEditing() : null)}>
@@ -35,6 +37,7 @@ const Workspace: React.FC<IWorkspace> = ({
         autoFocus
         onChange={e => editNote(e.target.value)}
         value={editingNoteText ? editingNoteText : selectedNoteText}
+        onBlur={saveNote}
       ></textarea>
     );
   }

@@ -138,6 +138,10 @@ table {
 }
 .modal {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
   z-index: 2;
   border-radius: 5px;
@@ -154,4 +158,10 @@ table {
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
+}
+.message {
+  padding: 20px;
+}
+.btn:not(:last-child) {
+  margin-right: 20px;
 }

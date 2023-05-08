@@ -17,14 +17,19 @@ const App = () => {
   const [selectedNoteID, setSelectedNoteID] = useState<string>('');
   const [noteToDeleteID, setNoteToDeleteID] = useState<string>('');
   const [isNoteEditing, setIsNoteEditing] = useState<boolean>(false);
+  const [isNoteChanged, setIsNoteChanged] = useState<boolean>(false);
   const [editingNoteText, setEditingNoteText] = useState<string>('');
   const [searchInput, setSearchInput] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  // Gets all notes from server
   useEffect(() => {
     getNotes().then(res => {
       setNotes(res.records);
     });
   }, [refreshPage]);
+
+  // Clears note selection when there are changes in search input
   useEffect(() => {
     if (searchInput) {
       setSelectedNoteID('');
@@ -32,19 +37,24 @@ const App = () => {
     }
   }, [searchInput]);
 
+  // Create new note on server
   const createNote = (note: string = 'Це моя нова записка...') => {
     addNote(note).then(res => {
+      // After creation - reread all notes from server
       setRefreshPage(Date.now());
+      // Make created note editable and focused
       setSelectedNoteID(res.record.id);
       setIsNoteEditing(true);
     });
   };
 
+  // Open confirmation modal window, save noteID that has to be deleted
   const confirmDeleteNote = (noteID: string) => {
     setNoteToDeleteID(noteID);
     setIsModalOpen(true);
   };
 
+  // Delete note from server
   const deleteNote = () => {
     deleteNoteAPI(noteToDeleteID).then(() => {
       setNoteToDeleteID('');
@@ -53,31 +63,52 @@ const App = () => {
     setIsModalOpen(false);
   };
 
+  // Clear note to delete, when user canceled deletion
   const cancelDeletionNote = () => {
     setNoteToDeleteID('');
     setIsModalOpen(false);
   };
 
+  // Start note editing
   const startNoteEditing = () => {
     setIsNoteEditing(true);
   };
 
+  // Select note in note list, cancel note editing, set selected note ID
   const selectNote = (noteID: string) => {
     setIsNoteEditing(false);
     setEditingNoteText('');
-    setRefreshPage(Date.now());
     setSelectedNoteID(noteID);
   };
 
+  // Change editing note
   const editNote = (noteText: string) => {
     setEditingNoteText(noteText);
+    const editedNote = notes.find(note => note.id === selectedNoteID)?.values
+      .cNuCoUWPDdAlRcO30iDCkc;
+    // If note changed - set the flag that indicates that this note should be saved on server
+    if (editedNote !== noteText) setIsNoteChanged(true);
+    // Change note text locally in state
     setNotes(notes => {
       const newNotes = [...notes];
       const editedNote = newNotes.find(note => note.id === selectedNoteID) as IRecord;
-      editedNote.values.cjW6LtobLbW4dcIwGSiSkE = noteText;
+      editedNote.values.cNuCoUWPDdAlRcO30iDCkc = noteText;
       return newNotes;
     });
-    updateNoteAPI(selectedNoteID, noteText);
+  };
+
+  // Saving note on server
+  const saveNote = () => {
+    const editedNote = notes.find(note => note.id === selectedNoteID) as IRecord;
+    const noteText = editedNote.values.cNuCoUWPDdAlRcO30iDCkc;
+    // Save only if note text changed
+    if (isNoteChanged) {
+      updateNoteAPI(selectedNoteID, noteText).then(() => {
+        setIsNoteChanged(false);
+      });
+    }
+    setIsNoteEditing(false);
+    setEditingNoteText('');
   };
 
   return (
@@ -100,6 +131,7 @@ const App = () => {
             startNoteEditing={startNoteEditing}
             editingNoteText={editingNoteText}
             editNote={editNote}
+            saveNote={saveNote}
           />
         </div>
       </div>
@@ -109,9 +141,15 @@ const App = () => {
         isOpen={isModalOpen}
         ariaHideApp={false}
       >
-        <p>Please confirm note deletion</p>
-        <button onClick={() => deleteNote()}>Confirm deletion</button>
-        <button onClick={() => cancelDeletionNote()}>Close</button>
+        <p className="message">Будь ласка підтвердіть видалення нотатки</p>
+        <div>
+          <button className="btn" onClick={() => deleteNote()}>
+            Видалити назавжди
+          </button>
+          <button className="btn" onClick={() => cancelDeletionNote()}>
+            Відмінити
+          </button>
+        </div>
       </ReactModal>
     </NotesContext.Provider>
   );

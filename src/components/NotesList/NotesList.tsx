@@ -13,7 +13,7 @@ const NotesList: React.FC<INotesList> = ({ selectNote, searchInput }) => {
   const notes = (
     searchInput
       ? notesContext.notes.filter(note =>
-          note.values.cjW6LtobLbW4dcIwGSiSkE.toLocaleLowerCase().includes(searchInput.toLowerCase())
+          note.values.cNuCoUWPDdAlRcO30iDCkc.toLocaleLowerCase().includes(searchInput.toLowerCase())
         )
       : notesContext.notes
   ).sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at));
@@ -47,9 +47,9 @@ const NotesList: React.FC<INotesList> = ({ selectNote, searchInput }) => {
               {new Date(Date.parse(updated_at)).toLocaleTimeString()}
             </p>
             <p className={css.notePreview}>
-              {values.cjW6LtobLbW4dcIwGSiSkE.length > 50
-                ? values.cjW6LtobLbW4dcIwGSiSkE.slice(0, 50) + '...'
-                : values.cjW6LtobLbW4dcIwGSiSkE}
+              {values.cNuCoUWPDdAlRcO30iDCkc.length > 50
+                ? values.cNuCoUWPDdAlRcO30iDCkc.slice(0, 50) + '...'
+                : values.cNuCoUWPDdAlRcO30iDCkc}
             </p>
           </li>
         ))}
